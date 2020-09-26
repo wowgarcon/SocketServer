@@ -1,8 +1,8 @@
-const socketio = require('socket.io');
-const chat = require('./controller/chatController');
+const io = require('socket.io');
+const chatCtr = require('./controller/chatController');
 
-module.exports = (app, port) => {
-    socketio.listen(port);
+module.exports = server => {
+    const socketio = io(server);
     const adminNameSpace = socketio.of('/admin');
     const chatNameSpace = socketio.of('/chat');
     
@@ -11,11 +11,11 @@ module.exports = (app, port) => {
         next();
     });
     adminNameSpace.on('connection', socket => { 
-        console .log('Socket Admin Connected'); 
+        console.log(`Socket Admin '${socket.id}' is Connected`); 
     });
 
     chatNameSpace.on('connection', socket => { 
-       chatCon.log('Socket Chat Connected'); 
-       chat(socket);
+        console.log(`Socket Chat user '${socket.id}' is Connected`); 
+        chatCtr(socket);
     });
 }
